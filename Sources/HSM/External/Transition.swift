@@ -9,7 +9,8 @@
 public struct Transition {
     // MARK: - Properties
 
-    public let target: StateProtocol? // `nil` indicates an internal transition
+    public let target: StateProtocol? /// `nil` indicates an *internal* self-transition
+                                      /// and the same target as the source itself indicates an *external* self-transition
     public let action: (() -> Void)?
 
     // MARK: - Initialization

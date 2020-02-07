@@ -151,7 +151,7 @@ final class OrthogonalTests: XCTestCase {
 
         extended.reset()
         sut.transition(
-            to: sut.s0.s2,
+            to: sut.s0.s2, // external self-transition
             action: { extended.transitionSequence.append(.transitionAction) }
         )
 
@@ -177,7 +177,9 @@ final class OrthogonalTests: XCTestCase {
         XCTAssertTrue(sut.s0.s2.isActive)
 
         XCTAssertEqual(extended.transitionSequence,
-                       [.transitionAction])
+                       [.exit(sut.s0.s2),
+                        .transitionAction,
+                        .entry(sut.s0.s2)])
     }
 
     func test_02() {

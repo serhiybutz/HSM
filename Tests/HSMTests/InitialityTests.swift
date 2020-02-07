@@ -72,7 +72,7 @@ final class InitialityTests: XCTestCase {
 
         extended.reset()
         sut.transition(
-            to: sut.s0,
+            to: sut.s0, // external self-transition
             action: { extended.transitionSequence.append(.transitionAction) }
         )
 
@@ -97,13 +97,15 @@ final class InitialityTests: XCTestCase {
         XCTAssertFalse(sut.s1.isActive)
 
         XCTAssertEqual(extended.transitionSequence,
-                       [.transitionAction])
+                       [.exit(sut.s0),
+                        .transitionAction,
+                        .entry(sut.s0)])
 
         // When
 
         extended.reset()
         sut.s0.transition(
-            to: sut.s0,
+            to: sut.s0, // external self-transition
             action: { extended.transitionSequence.append(.transitionAction) }
         )
 
@@ -128,7 +130,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertFalse(sut.s1.isActive)
 
         XCTAssertEqual(extended.transitionSequence,
-                       [.transitionAction])
+                       [.exit(sut.s0),
+                        .transitionAction,
+                        .entry(sut.s0)])
 
         // When
 
@@ -804,7 +808,7 @@ final class InitialityTests: XCTestCase {
 
         extended.reset()
         sut.s2.s21.transition(
-            to: sut.s2.s21.s212,
+            to: sut.s2.s21.s212, // external self-transition
             action: { extended.transitionSequence.append(.transitionAction) }
         )
 
@@ -845,7 +849,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s2.s21.s212.isActive)
 
         XCTAssertEqual(extended.transitionSequence,
-                       [.transitionAction])
+                       [.exit(sut.s2.s21.s212),
+                        .transitionAction,
+                        .entry(sut.s2.s21.s212)])
 
         // When
 

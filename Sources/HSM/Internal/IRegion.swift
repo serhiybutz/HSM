@@ -39,44 +39,62 @@ final class IRegion {
 
         guard let target = target else { return }
 
+        let externalSelfTransitionDst = activeState === target
+            ? target
+            : nil
+
         // address the dynamic part of state transition
         let dst = (target as? IStateAttributes)?.promotedActivation ?? target
 
         IStateBase.traverseFromRoot(to: dst) { current, next in
             let state = (current as! IStateBase)
             if state is IRegionCluster {
-                state.region.activateState(current, nonFinalTargetNext: next, context)
+                state.region.activateState(current, nonFinalTargetNext: next, context, extSelfTransDst: externalSelfTransitionDst)
             } else if state === dst {
-                state.region.activateState(current, nonFinalTargetNext: next, context)
+                state.region.activateState(current, nonFinalTargetNext: next, context, extSelfTransDst: externalSelfTransitionDst)
             }
         }
 
         handleSubsequentTransitions(context)
     }
 
-    func activateState(_ state: IStateTopology?, nonFinalTargetNext: IStateTopology?, _ context: ITransitionContext) {
+    func activateState(_ state: IStateTopology?, nonFinalTargetNext: IStateTopology?, _ context: ITransitionContext, extSelfTransDst: IStateTopology? = nil) {
         if let state = state {
             precondition(state.region === self)
-            IStateBase.traverse(
-                from: activeState ?? rootState!,
-                to: state,
-                entryVisit: { current, inRegionNext in
-                    if let action = context.transitionAction {
-                        self.actionDispatcher.dispatch(action)
-                        context.transitionAction = nil
-                    }
-                    (current as! IStateBase).onActivation(next: inRegionNext ?? nonFinalTargetNext, context)
-                },
-                exitVisit: { current, prev in
-                    (current as! IStateBase).onDeactivation(context)
-                },
-                convergeVisit: { current, _, inRegionNext in
-                    if self.activeState == nil {
-                        // when the region is not yet attended, we need to activate the original (root) state
-                        (current as! IStateBase).onActivation(next: inRegionNext ?? nonFinalTargetNext, context)
-                    }
+
+            let actState = activeState ?? rootState!
+
+            if actState === extSelfTransDst {
+                precondition(state === extSelfTransDst)
+                // perform external self transition
+                (state as! IStateBase).onDeactivation(context)
+                if let action = context.transitionAction {
+                    self.actionDispatcher.dispatch(action)
+                    context.transitionAction = nil
                 }
-            )
+                (state as! IStateBase).onActivation(next: nil, context)
+            } else {
+                IStateBase.traverse(
+                    from: actState,
+                    to: state,
+                    entryVisit: { current, inRegionNext in
+                        if let action = context.transitionAction {
+                            self.actionDispatcher.dispatch(action)
+                            context.transitionAction = nil
+                        }
+                        (current as! IStateBase).onActivation(next: inRegionNext ?? nonFinalTargetNext, context)
+                    },
+                    exitVisit: { current, prev in
+                        (current as! IStateBase).onDeactivation(context)
+                    },
+                    convergeVisit: { current, _, inRegionNext in
+                        if self.activeState == nil {
+                            // when the region is not yet attended, we need to activate the original (root) state
+                            (current as! IStateBase).onActivation(next: inRegionNext ?? nonFinalTargetNext, context)
+                        }
+                    }
+                )
+            }
         } else {
             // deactivate the whole region
             guard activeState != nil else { return }

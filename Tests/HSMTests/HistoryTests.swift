@@ -274,7 +274,7 @@ final class HistoryTests: XCTestCase {
 
         extended.reset()
         sut.transition(
-            to: sut.s2,
+            to: sut.s2, // external self-transition
             action: { extended.transitionSequence.append(.transitionAction) }
         )
 
@@ -299,7 +299,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s2.isActive)
 
         XCTAssertEqual(extended.transitionSequence,
-                       [.transitionAction])
+                       [.exit(sut.s2),
+                        .transitionAction,
+                        .entry(sut.s2)])
 
         // When
 
@@ -774,7 +776,7 @@ final class HistoryTests: XCTestCase {
 
         extended.reset()
         sut.s0.transition(
-            to: sut.s0.s1,
+            to: sut.s0.s1, // external self-transition
             action: { extended.transitionSequence.append(.transitionAction) }
         )
 
@@ -804,7 +806,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s2.isActive)
 
         XCTAssertEqual(extended.transitionSequence,
-                       [.transitionAction])
+                       [.exit(sut.s0.s1),
+                        .transitionAction,
+                        .entry(sut.s0.s1)])
 
         // When
 
@@ -1264,7 +1268,7 @@ final class HistoryTests: XCTestCase {
 
         extended.reset()
         sut.s0.transition(
-            to: sut.s0.s1,
+            to: sut.s0.s1, // external self-transition
             action: { extended.transitionSequence.append(.transitionAction) }
         )
 
@@ -1294,8 +1298,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s2.isActive)
 
         XCTAssertEqual(extended.transitionSequence,
-                       [.transitionAction]) // s1 in history -> so it must stay put
-
+                       [.exit(sut.s0.s1),
+                        .transitionAction, // s1 in history -> so it must stay put
+                        .entry(sut.s0.s1)])
         // When
 
         extended.reset()
@@ -1660,7 +1665,7 @@ final class HistoryTests: XCTestCase {
 
         extended.reset()
         sut.s0.transition(
-            to: sut.s0.s01,
+            to: sut.s0.s01, // external self-transition
             action: { extended.transitionSequence.append(.transitionAction) }
         )
 
@@ -1701,7 +1706,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s1.isActive)
 
         XCTAssertEqual(extended.transitionSequence,
-                       [.transitionAction])
+                       [.exit(sut.s0.s01),
+                        .transitionAction,
+                        .entry(sut.s0.s01)])
 
         // When
 

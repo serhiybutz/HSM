@@ -244,7 +244,7 @@ final class JoinTests: XCTestCase {
 
         extended.reset()
         sut.transition(
-            to: sut.s1.s11.s112,
+            to: sut.s1.s11.s112, // external self-transition
             action: { extended.transitionSequence.append(.transitionAction) }
         )
 
@@ -286,7 +286,9 @@ final class JoinTests: XCTestCase {
         XCTAssertFalse(sut.s2.isActive)
 
         XCTAssertEqual(extended.transitionSequence,
-                       [.transitionAction])
+                       [.exit(sut.s1.s11.s112),
+                        .transitionAction,
+                        .entry(sut.s1.s11.s112)])
 
         // When
 
