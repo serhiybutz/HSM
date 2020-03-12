@@ -107,7 +107,15 @@ extension IStateBase: CustomStringConvertible, CustomDebugStringConvertible {
         let `internal` = self as AnyObject
         let region = self.region as AnyObject
         let external = self.external as AnyObject
-        return "\(type(of: `internal`))(\(String(format: "%p", unsafeBitCast(`internal`, to: Int.self)))){\(type(of: region))(\(String(format: "%p", unsafeBitCast(region, to: Int.self))))}{\(type(of: external))(\(String(format: "%p", unsafeBitCast(external, to: Int.self))))}"
+        return "\(type(of: `internal`))(\(String(format: "%p", unsafeBitCast(`internal`, to: Int.self))))^\(type(of: region))(\(String(format: "%p", unsafeBitCast(region, to: Int.self)))){\(breadCrumbs)(\(String(format: "%p", unsafeBitCast(external, to: Int.self))))}"
     }
     public var debugDescription: String { description }
+    public var breadCrumbs: String {
+        let str = "\(type(of: external))"
+        if let s = location.superior {
+            return "\((s as! IStateBase).breadCrumbs)/\(str)"
+        } else {
+            return str
+        }
+    }
 }
