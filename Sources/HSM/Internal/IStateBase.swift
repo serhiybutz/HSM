@@ -83,22 +83,6 @@ class IStateBase: IStateTopology {
             region.actionDispatcher.dispatch(exitAction)
         }
     }
-
-    func dispatch(_ event: EventProtocol, _ transitions: IUniqueRegionEntries<ITransition>) -> Bool {
-        if let transition = (external as? DowncastingEventHandling)?._handle(event) {
-            if let targetState = (transition.target as! InternalReferencing?)?.internal {
-                transitions.append(targetState.region, payload: ITransition(source: self, transition: transition))
-            } else {
-                // perform action for internal transition in place and consider the dispatch handled in this region
-                if let action = transition.action {
-                    region.actionDispatcher.dispatch(action)
-                }
-            }
-            return true // dispatch has been handled
-        } else {
-            return false
-        }
-    }
 }
 
 // MARK: - CustomStringConvertible, CustomDebugStringConvertible

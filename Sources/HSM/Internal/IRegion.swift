@@ -140,15 +140,37 @@ final class IRegion {
         }
     }
 
-    func dispatch(_ event: EventProtocol, _ transitions: IUniqueRegionEntries<ITransition>) -> Bool {
-        if let activeState = activeState {
-            var runningState: IStateBase? = activeState
+    func dispatch(_ event: EventProtocol, _ transitions: IUniqueRegionEntries<ITransition>) {
+        traverseActive { currentState in
+            if let transition = (currentState.external as? DowncastingEventHandling)?._handle(event) {
+                if let targetState = (transition.target as! InternalReferencing?)?.internal {
+                    transitions.append(targetState.region, payload: ITransition(source: currentState, transition: transition))
+                } else {
+                    // perform action for internal transition in place and consider the dispatch handled in this region
+                    if let action = transition.action {
+                        currentState.region.actionDispatcher.dispatch(action)
+                    }
+                }
+                return true // dispatch has been handled
+            } else {
+                return false
+            }
+        }
+    }
+
+    func traverseActive(_ exec: (IStateBase) -> Bool) {
+        guard let activeState = activeState else { return }
+        var runningState: IStateBase? = activeState
+        if let regionCluster = runningState as? IRegionCluster {
+            for subregion in regionCluster.subregions {
+                subregion.traverseActive(exec)
+            }
+        } else {
             while runningState != nil {
-                if runningState!.dispatch(event, transitions) { return true }
+                if exec(runningState!) { return }
                 runningState = runningState!.superiorInRegion as! IStateBase?
             }
         }
-        return !transitions.isEmpty
     }
 }
 
@@ -157,7 +179,8 @@ final class IRegion {
 extension IRegion: Dispatching {
     func dispatch(_ event: EventProtocol) {
         let transitions = IUniqueRegionEntries<ITransition>()
-        let isConsumed = dispatch(event, transitions)
+        dispatch(event, transitions)
+        let isConsumed = !transitions.isEmpty
         if isConsumed {
             for iTranisition in transitions {
                 let target = (iTranisition.transition.target as! InternalReferencing).internal!

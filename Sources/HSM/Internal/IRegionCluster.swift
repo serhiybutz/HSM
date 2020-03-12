@@ -32,16 +32,6 @@ final class IRegionCluster: IStateBase {
         super.onDeactivation(context)
     }
 
-    override func dispatch(_ event: EventProtocol, _ transitions: IUniqueRegionEntries<ITransition>) -> Bool {
-        var isConsumed = false
-        for subregion in subregions {
-            if subregion.dispatch(event, transitions) {
-                isConsumed = true
-            }
-        }
-        return isConsumed
-    }
-
     // MARK: - Helpers
 
     func activateSubregions(_ next: IStateTopology?, _ context: ITransitionContext) {
