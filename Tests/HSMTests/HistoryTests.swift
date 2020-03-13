@@ -40,6 +40,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.entry(sut)])
 
@@ -64,6 +67,9 @@ final class HistoryTests: XCTestCase {
 
         XCTAssertTrue(sut.isActive)
         XCTAssertTrue(sut.s1.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
@@ -90,6 +96,9 @@ final class HistoryTests: XCTestCase {
 
         XCTAssertTrue(sut.isActive)
         XCTAssertTrue(sut.s1.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction]) // s1 in history -> so it stays active
@@ -119,6 +128,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.entry(sut)])
 
@@ -143,6 +155,9 @@ final class HistoryTests: XCTestCase {
 
         XCTAssertTrue(sut.isActive)
         XCTAssertTrue(sut.s1.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
@@ -169,6 +184,9 @@ final class HistoryTests: XCTestCase {
 
         XCTAssertTrue(sut.isActive)
         XCTAssertTrue(sut.s1.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction]) // s1 in history -> so it just stays active
@@ -204,6 +222,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s1.isActive)
         XCTAssertFalse(sut.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.entry(sut)])
 
@@ -234,6 +255,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.isActive)
         XCTAssertFalse(sut.s1.isActive)
         XCTAssertTrue(sut.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
@@ -267,6 +291,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s1.isActive)
         XCTAssertTrue(sut.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction]) // s2 in history -> so it just stays active
 
@@ -297,6 +324,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.isActive)
         XCTAssertFalse(sut.s1.isActive)
         XCTAssertTrue(sut.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2),
@@ -330,6 +360,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.isActive)
         XCTAssertTrue(sut.s1.isActive)
         XCTAssertFalse(sut.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2),
@@ -364,6 +397,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s1.isActive)
         XCTAssertFalse(sut.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction]) // s1 in history -> so it just stays active
 
@@ -394,6 +430,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.isActive)
         XCTAssertFalse(sut.s1.isActive)
         XCTAssertTrue(sut.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s1),
@@ -427,6 +466,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.isActive)
         XCTAssertTrue(sut.s1.isActive)
         XCTAssertFalse(sut.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2),
@@ -469,6 +511,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.entry(sut)])
 
@@ -504,6 +549,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
@@ -542,6 +590,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertTrue(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s2))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
                         .entry(sut.s0.s2)])
@@ -578,6 +629,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.isActive)
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s2),
@@ -616,6 +670,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertTrue(sut.s0.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s2))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
@@ -655,6 +712,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s1))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s2),
                         .transitionAction,
@@ -693,6 +753,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s1))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction]) // s1 in history -> so it must stay put
 
@@ -728,6 +791,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.isActive)
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s1),
@@ -767,6 +833,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s1))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
                         .entry(sut.s0),
@@ -804,6 +873,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertTrue(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s1),
@@ -843,6 +915,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertTrue(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s2))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s1),
                         .transitionAction,
@@ -881,6 +956,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s2),
                         .exit(sut.s0),
@@ -918,6 +996,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertTrue(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
@@ -961,6 +1042,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.entry(sut)])
 
@@ -996,6 +1080,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
@@ -1034,6 +1121,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertTrue(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s2))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
                         .entry(sut.s0.s2)])
@@ -1070,6 +1160,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.isActive)
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s2),
@@ -1108,6 +1201,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertTrue(sut.s0.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s2))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
@@ -1147,6 +1243,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s1))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s2),
                         .transitionAction,
@@ -1185,6 +1284,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s1))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction]) // s1 in history -> so it must stay put
 
@@ -1220,6 +1322,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.isActive)
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s1),
@@ -1259,6 +1364,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s1))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
                         .entry(sut.s0),
@@ -1297,6 +1405,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s1))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s1),
                         .transitionAction, // s1 in history -> so it must stay put
@@ -1333,6 +1444,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertTrue(sut.s0.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s2))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s1),
@@ -1372,6 +1486,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s2),
                         .exit(sut.s0),
@@ -1409,6 +1526,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertTrue(sut.s0.s1.isActive)
         XCTAssertFalse(sut.s0.s2.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
@@ -1462,6 +1582,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.entry(sut)])
 
@@ -1508,6 +1631,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s011.isActive)
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertFalse(sut.s1.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
@@ -1557,6 +1683,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s01))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
                         .entry(sut.s0.s01)])
@@ -1604,6 +1733,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s011.isActive)
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertTrue(sut.s1.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s01),
@@ -1655,6 +1787,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s01))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s1),
                         .transitionAction,
@@ -1705,6 +1840,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s01))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s01),
                         .transitionAction,
@@ -1754,6 +1892,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.s01.s012.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s01.s012))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
                         .entry(sut.s0.s01.s012)])
@@ -1801,6 +1942,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s011.isActive)
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertFalse(sut.s1.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s01))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s01.s012),
@@ -1850,6 +1994,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s01))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction]) // s01 in history -> so it must enter
 
@@ -1896,6 +2043,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertTrue(sut.s0.s01.s011.isActive)
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertFalse(sut.s1.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s01.s011))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
@@ -1945,6 +2095,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s01.s011))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction])
 
@@ -1991,6 +2144,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s011.isActive)
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertTrue(sut.s1.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s01.s011),
@@ -2043,6 +2199,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertTrue(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction]) // s1 in history -> nothing happens
 
@@ -2090,6 +2249,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s01.s011))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s1),
                         .transitionAction,
@@ -2111,10 +2273,10 @@ final class HistoryTests: XCTestCase {
         //    |   | S0 H*                |   |
         //    |   |   #--------------#   |   |
         //    |   |   | S01          |   |   |
-        //    |   |   |   #------#   |   |   |
+        //    |   |   |   +------+   |   |   |
         //    |   |   |   | S011 |   |   |   |
         //    |   |   |   |      |   |   |   |
-        //    |   |   |   #------#   |   |   |
+        //    |   |   |   +------+   |   |   |
         //    |   +-->|              |   |   |
         //    |   |   |   +------+   |   |   |
         //    |   |   |   | S012 |   |   |   |
@@ -2141,6 +2303,9 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s01))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0.s01.s011),
                         .transitionAction])
@@ -2155,9 +2320,9 @@ final class HistoryTests: XCTestCase {
 
         //    #------------------------------#
         //    |   H                          |
-        //    |   +----------------------+   |
+        //    |   #----------------------#   |
         //    |   | S0 H*                |   |
-        //    |   |   +--------------+   |   |
+        //    |   |   #--------------#   |   |
         //    |   |   | S01          |   |   |
         //    |   |   |   +------+   |   |   |
         //    |   |   |   | S011 |   |   |   |
@@ -2169,9 +2334,9 @@ final class HistoryTests: XCTestCase {
         //    |   |   |   |      |   |   |   |
         //    |   |   |   +------+   |   |   |
         //    |   |   |              |   |   |
-        //    |   |   +--------------+   |   |
+        //    |   |   #--------------#   |   |
         //    |   |                      |   |
-        //    |   +----------------------+   |
+        //    |   #----------------------#   |
         //    |                              |
         //    |   +----------------------+   |
         //    |   | S1                   |   |
@@ -2188,6 +2353,12 @@ final class HistoryTests: XCTestCase {
         XCTAssertFalse(sut.s0.s01.s011.isActive)
         XCTAssertFalse(sut.s0.s01.s012.isActive)
         XCTAssertFalse(sut.s1.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s01))
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0.s01))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction]) // s0, s011 in history -> so nothing happens

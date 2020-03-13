@@ -97,6 +97,10 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
         return result
     }
 
+    public func activeStateConfiguration() -> [StateBasic] {
+        rootRegion.activeStateConfiguration().map { $0.external as! StateBasic }
+    }
+
     public var isActive: Bool { `internal`.isActive }
 
     public func dispatch(_ event: E) {

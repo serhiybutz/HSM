@@ -41,6 +41,9 @@ final class InitialHistoryTests: XCTestCase {
         XCTAssertFalse(sut.s1.isActive)
         XCTAssertTrue(sut.s2.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.entry(sut),
                         .entry(sut.s2)])

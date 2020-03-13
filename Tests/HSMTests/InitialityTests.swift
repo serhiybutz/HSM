@@ -30,6 +30,9 @@ final class InitialityTests: XCTestCase {
 
         XCTAssertTrue(sut.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.entry(sut)])
     }
@@ -64,6 +67,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.entry(sut),
                         .entry(sut.s0)])
@@ -95,6 +101,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.isActive)
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertFalse(sut.s1.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0),
@@ -129,6 +138,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0),
                         .transitionAction,
@@ -162,6 +174,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction])
 
@@ -192,6 +207,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.isActive)
         XCTAssertFalse(sut.s0.isActive)
         XCTAssertTrue(sut.s1.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0),
@@ -226,6 +244,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertFalse(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s1),
                         .transitionAction,
@@ -259,6 +280,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertFalse(sut.s0.isActive)
         XCTAssertTrue(sut.s1.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s0),
                         .transitionAction,
@@ -291,6 +315,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.isActive)
         XCTAssertTrue(sut.s0.isActive)
         XCTAssertFalse(sut.s1.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s0))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s1),
@@ -339,6 +366,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertFalse(sut.s2.s21.isActive)
         XCTAssertTrue(sut.s2.s22.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2.s22))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.entry(sut),
                         .entry(sut.s2),
@@ -382,6 +412,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertFalse(sut.s2.isActive)
         XCTAssertFalse(sut.s2.s21.isActive)
         XCTAssertFalse(sut.s2.s22.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2.s22),
@@ -428,6 +461,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertFalse(sut.s2.s21.isActive)
         XCTAssertTrue(sut.s2.s22.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2.s22))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s1),
                         .transitionAction,
@@ -473,6 +509,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s2.s21.isActive)
         XCTAssertFalse(sut.s2.s22.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2.s21))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2.s22),
                         .transitionAction,
@@ -516,6 +555,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s2.isActive)
         XCTAssertFalse(sut.s2.s21.isActive)
         XCTAssertTrue(sut.s2.s22.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2.s22))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2.s21),
@@ -561,6 +603,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s2.s21.isActive)
         XCTAssertFalse(sut.s2.s22.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2.s21))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2.s22),
                         .transitionAction,
@@ -604,6 +649,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertFalse(sut.s2.isActive)
         XCTAssertFalse(sut.s2.s21.isActive)
         XCTAssertFalse(sut.s2.s22.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2.s21),
@@ -650,6 +698,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s2.isActive)
         XCTAssertFalse(sut.s2.s21.isActive)
         XCTAssertTrue(sut.s2.s22.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2.s22))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s1),
@@ -704,6 +755,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertFalse(sut.s2.s21.s211.isActive)
         XCTAssertFalse(sut.s2.s21.s212.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.entry(sut),
                         .entry(sut.s2)])
@@ -751,6 +805,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s2.s21.isActive)
         XCTAssertFalse(sut.s2.s21.s211.isActive)
         XCTAssertTrue(sut.s2.s21.s212.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2.s21.s212))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction,
@@ -801,6 +858,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertFalse(sut.s2.s21.s211.isActive)
         XCTAssertTrue(sut.s2.s21.s212.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2.s21.s212))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.transitionAction])
 
@@ -847,6 +907,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s2.s21.isActive)
         XCTAssertFalse(sut.s2.s21.s211.isActive)
         XCTAssertTrue(sut.s2.s21.s212.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2.s21.s212))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2.s21.s212),
@@ -897,6 +960,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s2.s21.s211.isActive)
         XCTAssertFalse(sut.s2.s21.s212.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2.s21.s211))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2.s21.s212),
                         .transitionAction,
@@ -945,6 +1011,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s2.s21.isActive)
         XCTAssertFalse(sut.s2.s21.s211.isActive)
         XCTAssertTrue(sut.s2.s21.s212.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2.s21.s212))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2.s21.s211),
@@ -995,6 +1064,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertTrue(sut.s2.s21.s211.isActive)
         XCTAssertFalse(sut.s2.s21.s212.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2.s21.s211))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2.s21.s212),
                         .transitionAction,
@@ -1043,6 +1115,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertFalse(sut.s2.s21.isActive)
         XCTAssertFalse(sut.s2.s21.s211.isActive)
         XCTAssertFalse(sut.s2.s21.s212.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2.s21.s211),
@@ -1095,6 +1170,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertFalse(sut.s2.s21.s211.isActive)
         XCTAssertTrue(sut.s2.s21.s212.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2.s21.s212))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s1),
                         .transitionAction,
@@ -1146,6 +1224,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertFalse(sut.s2.s21.s211.isActive)
         XCTAssertFalse(sut.s2.s21.s212.isActive)
 
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
+
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s2.s21.s212),
                         .exit(sut.s2.s21),
@@ -1196,6 +1277,9 @@ final class InitialityTests: XCTestCase {
         XCTAssertFalse(sut.s2.s21.isActive)
         XCTAssertFalse(sut.s2.s21.s211.isActive)
         XCTAssertFalse(sut.s2.s21.s212.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s2))
 
         XCTAssertEqual(extended.transitionSequence,
                        [.exit(sut.s1),

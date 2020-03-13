@@ -158,6 +158,15 @@ final class IRegion {
         }
     }
 
+    func activeStateConfiguration() -> [IStateBase] {
+        var result: [IStateBase] = []
+        traverseActive { currentState in
+            result.append(currentState)
+            return true
+        }
+        return result
+    }
+
     func traverseActive(_ exec: (IStateBase) -> Bool) {
         guard let activeState = activeState else { return }
         var runningState: IStateBase? = activeState
@@ -195,10 +204,16 @@ extension IRegion: Dispatching {
     }
 }
 
-// MARK: - CustomStringConvertible, CustomDebugStringConvertible
+// MARK: - Debugging-related
+
 extension IRegion: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String {
         "\(type(of: self))(\(String(format: "%p", unsafeBitCast(self, to: Int.self))))"
     }
     public var debugDescription: String { description }
+    public func activeStateConfigDump() -> String {
+        activeStateConfiguration()
+            .map { $0.description }
+            .joined(separator: "\n")
+    }
 }
