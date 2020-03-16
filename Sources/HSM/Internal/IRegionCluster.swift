@@ -27,7 +27,7 @@ final class IRegionCluster: IStateBase {
 
     override func onDeactivation(_ context: ITransitionContext) {
         for subregion in subregions {
-            subregion.activateState(nil, nonFinalTargetNext: nil, context)// deactivate()
+            subregion.activateState(nil, nonFinalTargetNext: nil, context)
         }
         super.onDeactivation(context)
     }

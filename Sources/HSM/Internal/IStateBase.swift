@@ -55,7 +55,10 @@ class IStateBase: IStateTopology {
         if let entryAction = (external as? StateProtocol)?.entry {
             region.actionDispatcher.dispatch(entryAction)
         }
-        // Signal joins
+    }
+
+    func handleTriggers(_ context: ITransitionContext) {
+        // (1) Try joins
         if let joins = joins {
             for join in joins {
                 var isTriggerred = true
@@ -71,7 +74,8 @@ class IStateBase: IStateTopology {
                 }
             }
         }
-        if let fork = fork {
+        /// (2) Try forks
+        if let fork = fork, !fork.outgoings.isEmpty {
             for outgoing in fork.outgoings {
                 context.triggeredActivations.append(outgoing.region, payload: outgoing)
             }

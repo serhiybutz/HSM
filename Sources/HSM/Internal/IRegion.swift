@@ -39,62 +39,57 @@ final class IRegion {
 
         guard let target = target else { return }
 
-        let externalSelfTransitionDst = activeState === target
-            ? target
-            : nil
+        if activeState === target && !(target is IRegionCluster) {
+            // edge case for external self transition
+            (target as! IStateBase).onDeactivation(context)
+            if let action = context.transitionAction {
+                self.actionDispatcher.dispatch(action)
+                context.transitionAction = nil
+            }
+            (target as! IStateBase).onActivation(next: nil, context)
+        } else {
+            // address the dynamic mechanism of state transition
+            let finalTarget = (target as? IStateAttributes)?.promotedActivation ?? target
 
-        // address the dynamic part of state transition
-        let dst = (target as? IStateAttributes)?.promotedActivation ?? target
-
-        IStateBase.traverseFromRoot(to: dst) { current, next in
-            let state = (current as! IStateBase)
-            if state is IRegionCluster {
-                state.region.activateState(current, nonFinalTargetNext: next, context, extSelfTransDst: externalSelfTransitionDst)
-            } else if state === dst {
-                state.region.activateState(current, nonFinalTargetNext: next, context, extSelfTransDst: externalSelfTransitionDst)
+            IStateBase.traverseFromRoot(to: finalTarget) { current, next in
+                let currentState = (current as! IStateBase)
+                if currentState is IRegionCluster {
+                    currentState.region.activateState(current, nonFinalTargetNext: next, context)
+                } else if currentState === finalTarget {
+                    currentState.region.activateState(current, nonFinalTargetNext: next, context)
+                }
             }
         }
 
         handleSubsequentTransitions(context)
     }
 
-    func activateState(_ state: IStateTopology?, nonFinalTargetNext: IStateTopology?, _ context: ITransitionContext, extSelfTransDst: IStateTopology? = nil) {
+    func activateState(_ state: IStateTopology?, nonFinalTargetNext: IStateTopology?, _ context: ITransitionContext) {
         if let state = state {
             precondition(state.region === self)
 
             let actState = activeState ?? rootState!
-
-            if actState === extSelfTransDst {
-                precondition(state === extSelfTransDst)
-                // perform external self transition
-                (state as! IStateBase).onDeactivation(context)
-                if let action = context.transitionAction {
-                    self.actionDispatcher.dispatch(action)
-                    context.transitionAction = nil
-                }
-                (state as! IStateBase).onActivation(next: nil, context)
-            } else {
-                IStateBase.traverse(
-                    from: actState,
-                    to: state,
-                    entryVisit: { current, inRegionNext in
-                        if let action = context.transitionAction {
-                            self.actionDispatcher.dispatch(action)
-                            context.transitionAction = nil
-                        }
-                        (current as! IStateBase).onActivation(next: inRegionNext ?? nonFinalTargetNext, context)
-                    },
-                    exitVisit: { current, prev in
-                        (current as! IStateBase).onDeactivation(context)
-                    },
-                    convergeVisit: { current, _, inRegionNext in
-                        if self.activeState == nil {
-                            // when the region is not yet attended, we need to activate the original (root) state
-                            (current as! IStateBase).onActivation(next: inRegionNext ?? nonFinalTargetNext, context)
-                        }
+            IStateBase.traverse(
+                from: actState,
+                to: state,
+                entryVisit: { current, inRegionNext in
+                    if let action = context.transitionAction {
+                        self.actionDispatcher.dispatch(action)
+                        context.transitionAction = nil
                     }
-                )
-            }
+                    (current as! IStateBase).onActivation(next: inRegionNext ?? nonFinalTargetNext, context)
+                },
+                exitVisit: { current, prev in
+                    (current as! IStateBase).onDeactivation(context)
+                },
+                convergeVisit: { current, _, inRegionNext in
+                    if self.activeState == nil {
+                        // when the region is not yet attended, we need to activate the original (root) state
+                        (current as! IStateBase).onActivation(next: inRegionNext ?? nonFinalTargetNext, context)
+                    }
+                }
+            )
+            (state as! IStateBase).handleTriggers(context)
         } else {
             // deactivate the whole region
             guard activeState != nil else { return }
@@ -143,10 +138,13 @@ final class IRegion {
     func dispatch(_ event: EventProtocol, _ transitions: IUniqueRegionEntries<ITransition>) {
         traverseActive { currentState in
             if let transition = (currentState.external as? DowncastingEventHandling)?._handle(event) {
-                if let targetState = (transition.target as! InternalReferencing?)?.internal {
+                if let target = transition.target {
+                    // External transition:
+                    let targetState = (target as! InternalReferencing).internal!
                     transitions.append(targetState.region, payload: ITransition(source: currentState, transition: transition))
                 } else {
-                    // perform action for internal transition in place and consider the dispatch handled in this region
+                    // Internal transition:
+                    // Perform action for internal transition in place and consider the dispatch handled in this region
                     if let action = transition.action {
                         currentState.region.actionDispatcher.dispatch(action)
                     }
@@ -191,9 +189,9 @@ extension IRegion: Dispatching {
         dispatch(event, transitions)
         let isConsumed = !transitions.isEmpty
         if isConsumed {
-            for iTranisition in transitions {
-                let target = (iTranisition.transition.target as! InternalReferencing).internal!
-                iTranisition.source.transition(to: target, action: iTranisition.transition.action)
+            for iTran in transitions {
+                let target = (iTran.transition.target as! InternalReferencing).internal!
+                iTran.source.transition(to: target, action: iTran.transition.action)
             }
         } else {
             precondition(transitions.isEmpty)
