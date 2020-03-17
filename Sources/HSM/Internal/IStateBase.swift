@@ -70,14 +70,14 @@ class IStateBase: IStateTopology {
                 }
                 if isTriggerred {
                     let state = join.superiorInRegion! as! IStateBase
-                    context.triggeredActivations.append(state.region, payload: state)
+                    context.triggeredTransitions.append(state.region, payload: ITransition(source: state, transition: Transition(to: (state.external as! StateProtocol))))
                 }
             }
         }
         /// (2) Try forks
         if let fork = fork, !fork.outgoings.isEmpty {
             for outgoing in fork.outgoings {
-                context.triggeredActivations.append(outgoing.region, payload: outgoing)
+                context.triggeredTransitions.append(outgoing.region, payload: ITransition(source: outgoing, transition: Transition(to: (outgoing.external as! StateProtocol))))
             }
         }
     }

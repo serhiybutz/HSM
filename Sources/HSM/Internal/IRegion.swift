@@ -61,7 +61,7 @@ final class IRegion {
             }
         }
 
-        handleSubsequentTransitions(context)
+        handleTriggeredTransitions(context)
     }
 
     func activateState(_ state: IStateTopology?, nonFinalTargetNext: IStateTopology?, _ context: ITransitionContext) {
@@ -123,13 +123,14 @@ final class IRegion {
         }
     }
 
-    func handleSubsequentTransitions(_ context: ITransitionContext) {
-        while !context.triggeredActivations.isEmpty {
-            let triggeredActivations = context.triggeredActivations
-            context.triggeredActivations = []
-            IRegionCluster.execSkippingSubregionActivationFor(triggeredActivations.map { $0.region }) {
-                for targetState in triggeredActivations {
-                    targetState.region.transition(to: targetState as IStateTopology)
+    func handleTriggeredTransitions(_ context: ITransitionContext) {
+        while !context.triggeredTransitions.isEmpty {
+            let triggeredTransitions = context.triggeredTransitions
+            context.triggeredTransitions = []
+            IRegionCluster.execSkippingSubregionActivationFor(triggeredTransitions.map { $0.source.region }) {
+                for triggered in triggeredTransitions {
+                    let target = (triggered.transition.target as! InternalReferencing).internal!
+                    triggered.source.transition(to: target, action: triggered.transition.action)
                 }
             }
         }

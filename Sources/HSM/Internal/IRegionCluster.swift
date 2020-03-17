@@ -21,7 +21,6 @@ final class IRegionCluster: IStateBase {
     // MARK: - Lifecycle
 
     override func onActivation(next: IStateTopology?, _ context: ITransitionContext) {
-        super.onActivation(next: nil, context)
         activateSubregions(next, context)
     }
 
