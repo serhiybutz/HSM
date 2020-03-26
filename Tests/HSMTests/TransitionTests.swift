@@ -293,4 +293,76 @@ final class TransitionTests: XCTestCase {
         XCTAssertEqual(extended.transitionSequence,
                        [.handle(sut)])
     }
+
+    func test_02() {
+        // Given
+
+        let extended = Extended()
+        let sut = TransitionHSM02(extended)
+
+        // When
+
+        sut.start()
+
+        //    #-----------------------------#
+        //    |     *                       |
+        //    |  #--v--#  +-----+  +-----+  |
+        //    |  | S1  |  | S2  |  | S3  |  |
+        //    |  |     |  |     |  |     |  |
+        //    |  #-----#  +--O--+  +-----+  |
+        //    |              | always ^     |
+        //    |              +--------+     |
+        //    #-----------------------------#
+
+        // Then
+
+        XCTAssertTrue(sut.isActive)
+        XCTAssertTrue(sut.s1.isActive)
+        XCTAssertFalse(sut.s2.isActive)
+        XCTAssertFalse(sut.s3.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s1))
+
+        XCTAssertEqual(extended.transitionSequence,
+                       [.entry(sut),
+                        .entry(sut.s1)])
+
+        // When
+
+        extended.reset()
+        sut.dispatch(.init(nextState: sut.s2) {
+            extended.transitionSequence.append(.handle(sut))
+        })
+
+        //    #-----------------------------#
+        //    |     *                       |
+        //    |  +--v--+  +-----+  #-----#  |
+        //    |  | S1  |  | S2  |  | S3  |  |
+        //    |  |     +->|     |  |     |  |
+        //    |  +-----+  +--O--+  #-----#  |
+        //    |              | always ^     |
+        //    |              +--------+     |
+        //    #-----------------------------#
+
+        // Then
+
+        XCTAssertTrue(sut.isActive)
+        XCTAssertFalse(sut.s1.isActive)
+        XCTAssertFalse(sut.s2.isActive)
+        XCTAssertTrue(sut.s3.isActive)
+
+        XCTAssertEqual(E(sut.activeStateConfiguration()),
+                       E(sut.s3))
+
+        print(extended.transitionSequence)
+
+        XCTAssertEqual(extended.transitionSequence,
+                       [.exit(sut.s1),
+                        .handle(sut), // transition action
+                        .entry(sut.s2),
+                        .exit(sut.s2),
+                        .always,
+                        .entry(sut.s3)])
+    }
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os.log
 
 class IStateBase: IStateTopology {
     // MARK: - IStateTopology
@@ -58,6 +59,7 @@ class IStateBase: IStateTopology {
     }
 
     func handleTriggers(_ context: ITransitionContext) {
+        var isUsed = false
         // (1) Try joins
         if let joins = joins {
             for join in joins {
@@ -73,12 +75,28 @@ class IStateBase: IStateTopology {
                     context.triggeredTransitions.append(state.region, payload: ITransition(source: state, transition: Transition(to: (state.external as! StateProtocol))))
                 }
             }
+            isUsed = true
         }
         /// (2) Try forks
         if let fork = fork, !fork.outgoings.isEmpty {
+            if isUsed {
+                os_log("### [%s:%s] State \"%s\" with multiple reaction types!", log: .default, type: .error, "\(ModuleName)", "\(type(of: self))", "\(self)")
+                return
+            }
             for outgoing in fork.outgoings {
                 context.triggeredTransitions.append(outgoing.region, payload: ITransition(source: outgoing, transition: Transition(to: (outgoing.external as! StateProtocol))))
             }
+            isUsed = true
+        }
+        /// (3) Try *always* reaction
+        if let transition = (external as? StateProtocol)?.always() {
+            if isUsed {
+                os_log("### [%s:%s] State \"%s\" with multiple reaction types!", log: .default, type: .error, "\(ModuleName)", "\(type(of: self))", "\(self)")
+                return
+            }
+            context.triggeredTransitions.append((transition.target as! InternalReferencing).internal.region,
+                                                payload: ITransition(source: self, transition: transition))
+            isUsed = true
         }
     }
 

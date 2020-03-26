@@ -9,4 +9,5 @@
 public protocol StateProtocol: AnyObject {
     func entry()
     func exit()
+    func always() -> Transition?
 }

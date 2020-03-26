@@ -77,6 +77,7 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
     open func initialize() {}
     open func entry() {}
     open func exit() {}
+    open func always() -> Transition? { nil }
     open func handle(_ event: E) -> Transition? { nil }
 
     // MARK: - UI

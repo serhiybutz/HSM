@@ -25,6 +25,7 @@ open class State<P: StateBasic, U: TopStateEventTypeProtocol>: Vertex<P, U>, Eve
 
     open func entry() {}
     open func exit() {}
+    open func always() -> Transition? { nil }
     open func handle(_ event: U.EventType) -> Transition? { nil }
 }
 

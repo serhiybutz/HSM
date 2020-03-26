@@ -14,12 +14,14 @@ final class Extended {
         case entry(StateBasic)
         case handle(StateBasic) // Note: this one does not really relate to the transition sequence
         case transitionAction
+        case always
         static func == (lhs: TransitionSequenceEntry, rhs: TransitionSequenceEntry) -> Bool {
             switch (lhs, rhs) {
             case (.exit(let l), .exit(let r)): return l === r
             case (.entry(let l), .entry(let r)): return l === r
             case (.handle(let l), .handle(let r)): return l === r
             case (.transitionAction, .transitionAction): return true
+            case (.always, .always): return true
             default: return false
             }
         }
