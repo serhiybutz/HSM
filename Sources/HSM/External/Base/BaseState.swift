@@ -25,3 +25,20 @@ open class BaseState<U: TopStateEventTypeProtocol>: InternalReferencing, StateBa
     open func initialize() {}
     public var isActive: Bool { `internal`.isActive }
 }
+
+extension BaseState: StateQueries {
+    // MARK: - Queries
+
+    public var superiorState: StateBasic? {
+        `internal`.location.superior?.external as! StateBasic?
+    }
+
+    public var representsRegion: Bool {
+        let superior = `internal`.location.superior
+        return superior is IRegionCluster || superior == nil
+    }
+
+    public var activeStateInRegion: StateBasic? {
+        `internal`.region.activeState?.external as! StateBasic?
+    }
+}

@@ -112,6 +112,24 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
     }
 }
 
+// MARK: - Queries
+
+extension TopState: StateQueries {
+    public var superiorState: StateBasic? {
+        precondition(`internal`.location.superior == nil)
+        return nil
+    }
+
+    public var representsRegion: Bool {
+        return true
+    }
+
+    public var activeStateInRegion: StateBasic? {
+        precondition(`internal`.region === rootRegion)
+        return rootRegion.activeState?.external as! StateBasic?
+    }
+}
+
 // MARK: - Traits
 
 extension TopState: BindingTopState, Transitioning {}
