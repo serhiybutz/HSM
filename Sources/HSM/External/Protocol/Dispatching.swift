@@ -7,5 +7,5 @@
 //
 
 public protocol Dispatching: AnyObject {
-    func dispatch(_ event: EventProtocol)
+    func dispatch(_ event: EventProtocol, completion: DispatchCompletion?)
 }

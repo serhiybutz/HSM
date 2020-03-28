@@ -13,9 +13,9 @@ public final class SyncEventDispatcher<E: EventProtocol>: EventDispatching, Disp
     private var queue = DispatchQueue(label: "com.irizen.HSM.\(SyncEventDispatcher.name).SerialQueue", qos: .userInteractive)
     unowned var delegate: Dispatching!
     public init() {}
-    public func dispatch(_ event: E) {
+    public func dispatch(_ event: E, completion: DispatchCompletion?) {
         queue.sync {
-            self.delegate.dispatch(event)
+            self.delegate.dispatch(event, completion: completion)
         }
     }
 }

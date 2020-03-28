@@ -185,7 +185,7 @@ final class IRegion {
 // MARK: - Dispatching
 
 extension IRegion: Dispatching {
-    func dispatch(_ event: EventProtocol) {
+    func dispatch(_ event: EventProtocol, completion: DispatchCompletion?) {
         let transitions = IUniqueRegionEntries<ITransition>()
         dispatch(event, transitions)
         let isConsumed = !transitions.isEmpty
@@ -197,9 +197,10 @@ extension IRegion: Dispatching {
         } else {
             precondition(transitions.isEmpty)
 #if DebugVerbosityLevel1 || DebugVerbosityLevel2
-            os_log("### [%s:%s] Transition has not been handled for event %s", log: .default, type: .debug, "\(ModuleName)", "\(type(of: self))", "\(event)")
+            os_log("### [%s:%s] Transition has not been handled for event %s: %s", log: .default, type: .debug, "\(ModuleName)", "\(type(of: self))", "\(event)", activeStateConfigDump())
 #endif
         }
+        completion?(isConsumed)        
     }
 }
 

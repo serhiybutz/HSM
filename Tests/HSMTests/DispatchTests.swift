@@ -41,7 +41,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init())
+        sut.dispatch(.init(), completion: { XCTAssert($0) })
 
         //    #-----------#
         //    |           |
@@ -98,7 +98,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s1))
+        sut.dispatch(.init(nextState: sut.s1), completion: { XCTAssert($0) })
 
         //    #--------------------#
         //    |                    |
@@ -150,7 +150,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut))
+        sut.dispatch(.init(nextState: sut), completion: { XCTAssert($0) })
 
         //    #--------------------#
         //    |                    |
@@ -213,7 +213,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s1))
+        sut.dispatch(.init(nextState: sut.s1), completion: { XCTAssert($0) })
 
         //    #--------------------------#
         //    |                          |
@@ -244,7 +244,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s1.s11))
+        sut.dispatch(.init(nextState: sut.s1.s11), completion: { XCTAssert($0) })
 
         //    #--------------------------#
         //    |                          |
@@ -343,7 +343,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s0.s1.s11.s112.s1122))
+        sut.dispatch(.init(nextState: sut.s0.s1.s11.s112.s1122), completion: { XCTAssert($0) })
 
         //    #-----------------------------------------------------------------#
         //    |                                                                 |
@@ -405,7 +405,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s0.s2.s21))
+        sut.dispatch(.init(nextState: sut.s0.s2.s21), completion: { XCTAssert($0) })
 
         //    #-----------------------------------------------------------------#
         //    |                                                                 |
@@ -469,7 +469,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s0.s2.s22))
+        sut.dispatch(.init(nextState: sut.s0.s2.s22), completion: { XCTAssert($0) })
 
         //    #-----------------------------------------------------------------#
         //    |                                                                 |
@@ -533,7 +533,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s0.s1.s11.s111.s1111))
+        sut.dispatch(.init(nextState: sut.s0.s1.s11.s111.s1111), completion: { XCTAssert($0) })
 
         //    #-----------------------------------------------------------------#
         //    |                                                                 |
@@ -597,7 +597,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s3))
+        sut.dispatch(.init(nextState: sut.s3), completion: { XCTAssert($0) })
 
         //    #-----------------------------------------------------------------#
         //    |                                                                 |
@@ -659,7 +659,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s0.s1))
+        sut.dispatch(.init(nextState: sut.s0.s1), completion: { XCTAssert($0) })
 
         //    #-----------------------------------------------------------------#
         //    |                                                                 |
@@ -782,7 +782,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s2))
+        sut.dispatch(.init(nextState: sut.s2), completion: { XCTAssert($0) })
 
         //    #------------------------------------#
         //    |                                    |
@@ -838,7 +838,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s2))
+        sut.dispatch(.init(nextState: sut.s2), completion: { XCTAssert($0) })
 
         //    #------------------------------------#
         //    |                                    |
@@ -895,7 +895,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s1.s11.s112))
+        sut.dispatch(.init(nextState: sut.s1.s11.s112), completion: { XCTAssert($0) })
 
         //    #------------------------------------#
         //    |                                    |
@@ -952,7 +952,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s1.s12.s122))
+        sut.dispatch(.init(nextState: sut.s1.s12.s122), completion: { XCTAssert($0) })
 
         //    #------------------------------------#
         //    |                                    |
@@ -1013,7 +1013,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut))
+        sut.dispatch(.init(nextState: sut), completion: { XCTAssert($0) })
 
         //    #------------------------------------#
         //    |                                    |
@@ -1121,7 +1121,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s1.s11.s111))
+        sut.dispatch(.init(nextState: sut.s1.s11.s111), completion: { XCTAssert($0) })
 
         //    #--------------------------------------#
         //    |       #----#                         |
@@ -1169,7 +1169,7 @@ final class DispatchTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s1.s12.s121))
+        sut.dispatch(.init(nextState: sut.s1.s12.s121), completion: { XCTAssert($0) })
 
         //    #--------------------------------------#
         //    |       =----=                         |

@@ -45,7 +45,7 @@ final class TransitionTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s1))
+        sut.dispatch(.init(nextState: sut.s1), completion: { XCTAssert($0) })
 
         //    #-----+--------------#
         //    |     v              |
@@ -71,7 +71,7 @@ final class TransitionTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut.s2))
+        sut.dispatch(.init(nextState: sut.s2), completion: { XCTAssert($0) })
 
         //    #--------------------#
         //    |                    |
@@ -98,7 +98,7 @@ final class TransitionTests: XCTestCase {
         // When
 
         extended.reset()
-        sut.dispatch(.init(nextState: sut))
+        sut.dispatch(.init(nextState: sut), completion: { XCTAssert($0) })
 
         //    #--------------------#
         //    |              ^     |
@@ -126,7 +126,7 @@ final class TransitionTests: XCTestCase {
         extended.reset()
         sut.dispatch(.init(nextState: sut.s1) {
             extended.transitionSequence.append(.handle(sut.s1))
-        })
+        }, completion: { XCTAssert($0) })
 
         //    #-----+--------------#
         //    |     v              |
@@ -155,7 +155,7 @@ final class TransitionTests: XCTestCase {
         extended.reset()
         sut.dispatch(.init(nextState: nil) { // internal transition
             extended.transitionSequence.append(.handle(sut.s1))
-        })
+        }, completion: { XCTAssertFalse($0) })
 
         //    #--------------------#
         //    |    +-v             |
@@ -183,7 +183,7 @@ final class TransitionTests: XCTestCase {
         extended.reset()
         sut.dispatch(.init(nextState: sut.s2) {
             extended.transitionSequence.append(.handle(sut.s1))
-        })
+        }, completion: { XCTAssert($0) })
 
         //    #--------------------#
         //    |                    |
@@ -213,7 +213,7 @@ final class TransitionTests: XCTestCase {
         extended.reset()
         sut.dispatch(.init(nextState: nil) { // internal transition
             extended.transitionSequence.append(.handle(sut.s2))
-        })
+        }, completion: { XCTAssertFalse($0) })
 
         //    #--------------------#
         //    |             +-v    |
@@ -241,7 +241,7 @@ final class TransitionTests: XCTestCase {
         extended.reset()
         sut.dispatch(.init(nextState: sut) {
             extended.transitionSequence.append(.handle(sut))
-        })
+        }, completion: { XCTAssert($0) })
 
         //    #--------------------#
         //    |              ^     |
@@ -333,7 +333,7 @@ final class TransitionTests: XCTestCase {
         extended.reset()
         sut.dispatch(.init(nextState: sut.s2) {
             extended.transitionSequence.append(.handle(sut))
-        })
+        }, completion: { XCTAssert($0) })
 
         //    #-----------------------------#
         //    |     *                       |

@@ -104,11 +104,11 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
 
     public var isActive: Bool { `internal`.isActive }
 
-    public func dispatch(_ event: E) {
+    public func dispatch(_ event: E, completion: DispatchCompletion? = nil) {
 #if DebugVerbosityLevel2
         os_log("### [%s:%s] Dispatching event {%s}", log: .default, type: .debug, "\(ModuleName)", "\(type(of: self))", "\(event)")
 #endif
-        eventDispatcher.dispatch(event)
+        eventDispatcher.dispatch(event, completion: completion)
     }
 }
 
