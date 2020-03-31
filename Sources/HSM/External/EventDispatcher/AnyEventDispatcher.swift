@@ -7,9 +7,14 @@
 //
 
 public struct AnyEventDispatcher<E: EventProtocol>: EventDispatching {
+    let _start: () -> Void
     let _dispatch: (E, DispatchCompletion?) -> Void
     public init<ED: EventDispatching>(_ eventDispatcher: ED) where ED.EventType == E {
+        self._start = eventDispatcher.start
         self._dispatch = eventDispatcher.dispatch
+    }
+    public func start() {
+        _start()
     }
     public func dispatch(_ event: E, completion: DispatchCompletion?) {
         _dispatch(event, completion)

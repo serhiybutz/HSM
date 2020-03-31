@@ -13,6 +13,11 @@ public final class AsyncEventDispatcher<E: EventProtocol>: EventDispatching, Dis
     private var queue = DispatchQueue(label: "com.irizen.HSM.\(AsyncEventDispatcher.name).SerialQueue", qos: .userInteractive)
     unowned var delegate: Dispatching!
     public init() {}
+    public func start() {
+        queue.sync { // `start()` has to be sync for deterministic behavior
+            self.delegate.start()
+        }
+    }
     public func dispatch(_ event: E, completion: DispatchCompletion?) {
         queue.async {
             self.delegate.dispatch(event, completion: completion)

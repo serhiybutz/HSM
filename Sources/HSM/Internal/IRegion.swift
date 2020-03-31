@@ -175,6 +175,7 @@ final class IRegion {
             }
         } else {
             while runningState != nil {
+                precondition(!(runningState is IRegionCluster))
                 if exec(runningState!) { return }
                 runningState = runningState!.superiorInRegion as! IStateBase?
             }
@@ -185,6 +186,11 @@ final class IRegion {
 // MARK: - Dispatching
 
 extension IRegion: Dispatching {
+    func start() {
+        (rootState!.external as! StateBasic).initialize()
+        transition(to: rootState)
+    }
+
     func dispatch(_ event: EventProtocol, completion: DispatchCompletion?) {
         let transitions = IUniqueRegionEntries<ITransition>()
         dispatch(event, transitions)

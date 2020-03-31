@@ -57,7 +57,7 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
         // Injections:
         rootRegion.rootState = topState
         rootRegion.actionDispatcher = actionDispatcher
-        (eventDispatcher as? DispatchingDelegateInjected)?.delegate = rootRegion
+        (eventDispatcher as! DispatchingDelegateInjected).delegate = rootRegion
     }
 
     // MARK: - Properties
@@ -83,8 +83,7 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
     // MARK: - UI
 
     public func start() {
-        initialize()
-        rootRegion.transition(to: rootRegion.rootState!)
+        eventDispatcher.start()
     }
 
     public func dump() -> String {

@@ -8,5 +8,6 @@
 
 public protocol EventDispatching {
     associatedtype EventType: EventProtocol
+    func start()
     func dispatch(_ event: EventType, completion: ((Bool) -> Void)?)
 }
