@@ -21,7 +21,7 @@ final class InitialHSM01: TopState<Event> {
     let extended: Extended
     init(_ extended: Extended) {
         self.extended = extended
-        super.init(eventDispatcherType: SyncEventDispatcher<Event>.self)
+        super.init()
     }
     override func entry() {
         extended.transitionSequence.append(.entry(self))

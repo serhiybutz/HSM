@@ -44,7 +44,7 @@ final class NavigationHSM02: TopState<Event> {
 
     init(_ extended: Extended) {
         self.extended = extended
-        super.init(eventDispatcherType: SyncEventDispatcher<Event>.self)
+        super.init()
     }
     override func initialize() {
         bind(s1, s2)

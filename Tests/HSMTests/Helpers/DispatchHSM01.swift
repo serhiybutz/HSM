@@ -28,7 +28,7 @@ final class DispatchHSM01: TopState<DispatchHSM01.Event> {
     let s1 = S1()
     init(_ extended: Extended) {
         self.extended = extended
-        super.init(eventDispatcherType: SyncEventDispatcher<Event>.self)
+        super.init()
     }
     override func initialize() {
         bind(s1)

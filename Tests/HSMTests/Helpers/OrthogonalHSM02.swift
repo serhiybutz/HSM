@@ -87,7 +87,7 @@ final class OrthogonalHSM02: TopState<Event> {
     let s0 = S0()
     init(_ extended: Extended) {
         self.extended = extended
-        super.init(eventDispatcherType: SyncEventDispatcher<Event>.self)
+        super.init()
     }
     override func initialize() {
         bind(s0)

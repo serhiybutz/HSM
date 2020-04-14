@@ -53,9 +53,7 @@ class IStateBase: IStateTopology {
     // MARK: - Lifecycle
 
     func onActivation(next: IStateTopology?, _ context: ITransitionContext) {
-        if let entryAction = (external as? StateProtocol)?.entry {
-            region.actionDispatcher.dispatch(entryAction)
-        }
+        (external as? StateProtocol)?.entry()
     }
 
     func handleTriggers(_ context: ITransitionContext) {
@@ -101,9 +99,7 @@ class IStateBase: IStateTopology {
     }
 
     func onDeactivation(_ context: ITransitionContext) {
-        if let exitAction = (external as? StateProtocol)?.exit {
-            region.actionDispatcher.dispatch(exitAction)
-        }
+        (external as? StateProtocol)?.exit()
     }
 }
 

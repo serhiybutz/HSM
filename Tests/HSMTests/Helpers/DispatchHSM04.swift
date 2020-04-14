@@ -147,7 +147,7 @@ final class DispatchHSM04: TopState<DispatchHSM04.Event> {
     let s3 = S3()
     init(_ extended: Extended) {
         self.extended = extended
-        super.init(eventDispatcherType: SyncEventDispatcher<Event>.self)
+        super.init()
     }
     override func initialize() {
         bind(s0, s3)

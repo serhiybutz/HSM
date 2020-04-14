@@ -22,7 +22,6 @@ extension BindingCluster {
             switch s {
             case is StateProtocol:
                 let region = IRegion()
-                region.actionDispatcher = `internal`.region.actionDispatcher
                 let iVertex = IVertex(
                     location: .init(superior: `internal`),
                     region: region,
@@ -33,7 +32,6 @@ extension BindingCluster {
                 regions.append(region)
             case is ClusterProtocol:
                 let region = IRegion()
-                region.actionDispatcher = `internal`.region.actionDispatcher
                 let iCluster = IRegionCluster(
                     location: .init(superior: `internal`),
                     region: region,

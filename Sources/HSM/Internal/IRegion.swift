@@ -15,8 +15,6 @@ final class IRegion {
 
     var rootState: IStateBase?
 
-    var actionDispatcher: ActionDispatching!
-
     private(set) var activeState: IStateBase? {
         didSet {
 #if DebugVerbosityLevel2
@@ -32,7 +30,7 @@ final class IRegion {
     func transition(to target: IStateTopology?, context: ITransitionContext! = ITransitionContext()) {
         defer {
             if let action = context.transitionAction {
-                actionDispatcher.dispatch(action)
+                action()
                 context.transitionAction = nil
             }
         }
@@ -43,7 +41,7 @@ final class IRegion {
             // edge case for external self transition
             (target as! IStateBase).onDeactivation(context)
             if let action = context.transitionAction {
-                self.actionDispatcher.dispatch(action)
+                action()
                 context.transitionAction = nil
             }
             (target as! IStateBase).onActivation(next: nil, context)
@@ -74,7 +72,7 @@ final class IRegion {
                 to: state,
                 entryVisit: { current, inRegionNext in
                     if let action = context.transitionAction {
-                        self.actionDispatcher.dispatch(action)
+                        action()
                         context.transitionAction = nil
                     }
                     (current as! IStateBase).onActivation(next: inRegionNext ?? nonFinalTargetNext, context)
@@ -147,7 +145,7 @@ final class IRegion {
                     // Internal transition:
                     // Perform action for internal transition in place and consider the dispatch handled in this region
                     if let action = transition.action {
-                        currentState.region.actionDispatcher.dispatch(action)
+                        action()
                     }
                 }
                 return true // dispatch has been handled
@@ -180,33 +178,6 @@ final class IRegion {
                 runningState = runningState!.superiorInRegion as! IStateBase?
             }
         }
-    }
-}
-
-// MARK: - Dispatching
-
-extension IRegion: Dispatching {
-    func start() {
-        (rootState!.external as! StateBasic).initialize()
-        transition(to: rootState)
-    }
-
-    func dispatch(_ event: EventProtocol, completion: DispatchCompletion?) {
-        let transitions = IUniqueRegionEntries<ITransition>()
-        dispatch(event, transitions)
-        let isConsumed = !transitions.isEmpty
-        if isConsumed {
-            for iTran in transitions {
-                let target = (iTran.transition.target as! InternalReferencing).internal!
-                iTran.source.transition(to: target, action: iTran.transition.action)
-            }
-        } else {
-            precondition(transitions.isEmpty)
-#if DebugVerbosityLevel1 || DebugVerbosityLevel2
-            os_log("### [%s:%s] Transition has not been handled for event %s: %s", log: .default, type: .debug, "\(ModuleName)", "\(type(of: self))", "\(event)", activeStateConfigDump())
-#endif
-        }
-        completion?(isConsumed)        
     }
 }
 

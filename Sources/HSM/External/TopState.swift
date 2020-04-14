@@ -18,37 +18,17 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
 
     var `internal`: IStateBase!
 
-    // MARK: -
+    // MARK: - Properties
 
     let rootRegion = IRegion()
 
-    let eventDispatcher: AnyEventDispatcher<E>
+    static var name: String { "\(Self.self)" }
 
-    public let actionDispatcher: ActionDispatching
+    let queue = DispatchQueue(label: "com.irizen.HSM.\(TopState.name).SerialQueue", qos: .userInteractive)
 
-    // MARK: - Initilization
-
-    public init<ED: EventDispatching & SimplyInitializable>(eventDispatcherType: ED.Type, shouldRunActionsInMainThread: Bool = true) where ED.EventType == E {
-        let eventDispatcher = eventDispatcherType.init()
-        self.eventDispatcher = AnyEventDispatcher<E>(eventDispatcher)
-        self.actionDispatcher = TopState.makeActionDispatcher(shouldRunActionsInMainThread)
-        commonSetup(eventDispatcher: eventDispatcher)
-    }
+    // MARK: - Initialization
 
     public init(shouldRunActionsInMainThread: Bool = true) {
-        let eventDispatcher = AsyncEventDispatcher<E>()
-        self.eventDispatcher = AnyEventDispatcher<E>(eventDispatcher)
-        self.actionDispatcher = TopState.makeActionDispatcher(shouldRunActionsInMainThread)
-        commonSetup(eventDispatcher: eventDispatcher)
-    }
-
-    static func makeActionDispatcher(_ shouldRunActionsInMainThread: Bool) -> ActionDispatching {
-        shouldRunActionsInMainThread
-            ? MainThreadSyncActionDispatcher()
-            : FormalActionDispatcher()
-    }
-
-    func commonSetup<ED: EventDispatching & SimplyInitializable>(eventDispatcher: ED) {
         let topState = InternalTopState(
             location: .init(),
             region: rootRegion,
@@ -56,8 +36,6 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
         `internal` = topState
         // Injections:
         rootRegion.rootState = topState
-        rootRegion.actionDispatcher = actionDispatcher
-        (eventDispatcher as! DispatchingDelegateInjected).delegate = rootRegion
     }
 
     // MARK: - Properties
@@ -82,9 +60,35 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
 
     // MARK: - UI
 
+    public var isActive: Bool { `internal`.isActive }
+
     public func start() {
-        eventDispatcher.start()
+        queue.sync {
+            rootRegion.start()
+        }
     }
+
+    public func dispatch(_ event: E, async: Bool = false, completion: DispatchCompletion? = nil) {
+#if DebugVerbosityLevel2
+        os_log("### [%s:%s] Dispatching event {%s}", log: .default, type: .debug, "\(ModuleName)", "\(type(of: self))", "\(event)")
+#endif
+        if async {
+            queue.async {
+                self.rootRegion.dispatch(event, completion: completion)
+            }
+        } else {
+            queue.sync {
+                self.rootRegion.dispatch(event, completion: completion)
+            }
+        }
+    }
+
+    @discardableResult
+    public func access<T>(_ block: () -> T) -> T {
+        queue.sync(execute: block)
+    }
+
+    // MARK: - Debugging
 
     public func dump() -> String {
         var result = ""
@@ -99,15 +103,6 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
 
     public func activeStateConfiguration() -> [StateBasic] {
         rootRegion.activeStateConfiguration().map { $0.external as! StateBasic }
-    }
-
-    public var isActive: Bool { `internal`.isActive }
-
-    public func dispatch(_ event: E, completion: DispatchCompletion? = nil) {
-#if DebugVerbosityLevel2
-        os_log("### [%s:%s] Dispatching event {%s}", log: .default, type: .debug, "\(ModuleName)", "\(type(of: self))", "\(event)")
-#endif
-        eventDispatcher.dispatch(event, completion: completion)
     }
 }
 
