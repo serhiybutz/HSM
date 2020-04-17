@@ -22,9 +22,7 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
 
     let rootRegion = IRegion()
 
-    static var name: String { "\(Self.self)" }
-
-    let queue = DispatchQueue(label: "com.irizen.HSM.\(TopState.name).SerialQueue", qos: .userInteractive)
+    let dispatcher = SerialDispatcher()
 
     // MARK: - Initialization
 
@@ -63,7 +61,7 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
     public var isActive: Bool { `internal`.isActive }
 
     public func start() {
-        queue.sync {
+        dispatcher.sync {
             rootRegion.start()
         }
     }
@@ -73,11 +71,11 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
         os_log("### [%s:%s] Dispatching event {%s}", log: .default, type: .debug, "\(ModuleName)", "\(type(of: self))", "\(event)")
 #endif
         if async {
-            queue.async {
+            dispatcher.async {
                 self.rootRegion.dispatch(event, completion: completion)
             }
         } else {
-            queue.sync {
+            dispatcher.sync {
                 self.rootRegion.dispatch(event, completion: completion)
             }
         }
@@ -85,7 +83,7 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
 
     @discardableResult
     public func access<T>(_ block: () -> T) -> T {
-        queue.sync(execute: block)
+        dispatcher.sync(execute: block)
     }
 
     // MARK: - Debugging
