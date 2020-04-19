@@ -134,21 +134,11 @@ final class IRegion {
         }
     }
 
-    func dispatch(_ event: EventProtocol, _ transitions: IUniqueRegionEntries<ITransition>) {
+    func dispatch(_ event: EventProtocol, _ transitions: IUniqueRegionTransitions) {
         traverseActive { currentState in
             if let transition = (currentState.external as? DowncastingEventHandling)?._handle(event) {
-                if let target = transition.target {
-                    // External transition:
-                    let targetState = (target as! InternalReferencing).internal!
-                    transitions.append(targetState.region, payload: ITransition(source: currentState, transition: transition))
-                } else {
-                    // Internal transition:
-                    // Perform action for internal transition in place and consider the dispatch handled in this region
-                    if let action = transition.action {
-                        action()
-                    }
-                }
-                return true // dispatch has been handled
+                transitions.register(transition, for: currentState)
+                return true
             } else {
                 return false
             }

@@ -155,7 +155,7 @@ final class TransitionTests: XCTestCase {
         extended.reset()
         sut.dispatch(.init(nextState: nil) { // internal transition
             extended.transitionSequence.append(.handle(sut.s1))
-        }, completion: { XCTAssertFalse($0) })
+        }, completion: { XCTAssert($0) })
 
         //    #--------------------#
         //    |    +-v             |
@@ -213,7 +213,7 @@ final class TransitionTests: XCTestCase {
         extended.reset()
         sut.dispatch(.init(nextState: nil) { // internal transition
             extended.transitionSequence.append(.handle(sut.s2))
-        }, completion: { XCTAssertFalse($0) })
+        }, completion: { XCTAssert($0) })
 
         //    #--------------------#
         //    |             +-v    |

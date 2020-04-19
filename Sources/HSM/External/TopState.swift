@@ -6,10 +6,13 @@
 //  Copyright © 2020 iRiZen.com. All rights reserved.
 //
 
+import Foundation
 import os.log
 
 /// The top state, the purpose of which is to provide the ultimate root of the state hierarchy so that the state handlers can use `top` to refer to the whole state hierarchy.
 open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, EventHandling, TopStateEventTypeProtocol, TopStateProtocol {
+    // MARK: - Types
+
     public typealias EventType = E
 
     final class InternalTopState: IVertex {}
@@ -24,7 +27,9 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
 
     let dispatcher = SerialDispatcher()
 
-    // MARK: - Initialization
+    var localEventsQueue = Queue<E>()
+
+    private(set) var isDispatching: Bool = false
 
     public init(shouldRunActionsInMainThread: Bool = true) {
         let topState = InternalTopState(
@@ -66,24 +71,63 @@ open class TopState<E: EventProtocol>: InternalReferencing, StateAttributes, Eve
         }
     }
 
-    public func dispatch(_ event: E, async: Bool = false, completion: DispatchCompletion? = nil) {
+    public func dispatch(_ event: E, isAsync: Bool = false, completion: DispatchCompletion? = nil) {
 #if DebugVerbosityLevel2
         os_log("### [%s:%s] Dispatching event {%s}", log: .default, type: .debug, "\(ModuleName)", "\(type(of: self))", "\(event)")
 #endif
-        if async {
+
+        // When called from within dispatching, we force async mode for RTC
+        var isAsync = isAsync
+        if isDispatching {
+            isAsync = true
+        }
+
+        if isAsync {
             dispatcher.async {
-                self.rootRegion.dispatch(event, completion: completion)
+                self.internalDispatch(event, completion: completion)
             }
         } else {
             dispatcher.sync {
-                self.rootRegion.dispatch(event, completion: completion)
+                self.internalDispatch(event, completion: completion)
             }
         }
+    }
+
+    /// Schedule local dispatching
+    public func dispatchLocal(_ event: E) {
+#if DebugVerbosityLevel2
+        os_log("### [%s:%s] Dispatching local event {%s}", log: .default, type: .debug, "\(ModuleName)", "\(type(of: self))", "\(event)")
+#endif
+        precondition(isDispatching, "Local dispatching is only allowed inside the normal dispatching!")
+        dispatchPrecondition(condition: .onQueue(dispatcher.queue))
+        localEventsQueue.enqueue(event)
     }
 
     @discardableResult
     public func access<T>(_ block: () -> T) -> T {
         dispatcher.sync(execute: block)
+    }
+
+    // MARK: - Helpers
+
+    func internalDispatch(_ event: E, completion: DispatchCompletion? = nil) {
+        isDispatching = true
+        defer { isDispatching = false }
+
+        // Perform actual dispatching
+        let isConsumed = self.rootRegion.dispatch(event)
+
+        dispatchLocalEventsIfAny()
+
+        completion?(isConsumed)
+    }
+
+    func dispatchLocalEventsIfAny() {
+        while !localEventsQueue.isEmpty {
+            let event = localEventsQueue.dequeue()!
+            // just ignore `isConsumed` reporting for local dispatches
+            _ = self.rootRegion.dispatch(event)
+        }
     }
 
     // MARK: - Debugging

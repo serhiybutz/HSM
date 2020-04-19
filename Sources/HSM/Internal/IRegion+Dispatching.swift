@@ -16,14 +16,20 @@ extension IRegion: Dispatching {
         transition(to: rootState)
     }
 
-    func dispatch(_ event: EventProtocol, completion: DispatchCompletion?) {
-        let transitions = IUniqueRegionEntries<ITransition>()
+    func dispatch(_ event: EventProtocol) -> Bool {
+        let transitions = IUniqueRegionTransitions()
         dispatch(event, transitions)
         let isConsumed = !transitions.isEmpty
         if isConsumed {
             for iTran in transitions {
-                let target = (iTran.transition.target as! InternalReferencing).internal!
-                iTran.source.transition(to: target, action: iTran.transition.action)
+                if let target = (iTran.transition.target.flatMap({ $0 as? InternalReferencing }))?.internal! {
+                    iTran.source.transition(to: target, action: iTran.transition.action)
+                } else {
+                    // Perform action for internal transition
+                    if let action = iTran.transition.action {
+                        action()
+                    }
+                }
             }
         } else {
             precondition(transitions.isEmpty)
@@ -31,6 +37,6 @@ extension IRegion: Dispatching {
             os_log("### [%s:%s] Transition has not been handled for event %s: %s", log: .default, type: .debug, "\(ModuleName)", "\(type(of: self))", "\(event)", activeStateConfigDump())
 #endif
         }
-        completion?(isConsumed)
+        return isConsumed
     }
 }

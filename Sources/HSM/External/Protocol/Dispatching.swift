@@ -8,5 +8,5 @@
 
 public protocol Dispatching: AnyObject {
     func start()
-    func dispatch(_ event: EventProtocol, completion: DispatchCompletion?)
+    func dispatch(_ event: EventProtocol) -> Bool
 }

@@ -7,6 +7,6 @@
 //
 
 final class ITransitionContext {
-    var triggeredTransitions: IUniqueRegionEntries<ITransition> = []
+    var triggeredTransitions: IUniqueRegionTransitions = []
     var transitionAction: (() -> Void)?
 }
