@@ -3,6 +3,27 @@
 A hierarchical state machine (statechart) framework implementation in Swift.
 
 
+<p>
+    <img src="https://img.shields.io/badge/Swift-5.1-orange" alt="Swift" />
+    <img src="https://img.shields.io/badge/platform-macOS%20|%20iOS-orange.svg" alt="Platform" />
+    <img src="https://img.shields.io/badge/Swift%20Package%20Manager-compatible-orange" alt="SPM" />
+    <a href="https://github.com/SergeBouts/Mitra/blob/master/LICENSE">
+        <img src="https://img.shields.io/badge/licence-MIT-orange" alt="License" />
+    </a>
+</p>
+
+
+
+## Contents
+
+- [Features](#features)
+- [Usage](#usage)
+- [Demos](#demos)
+- [Installation](#installation)
+- [License](#license)
+- [Resources](#resources)
+
+
 
 ## Features:
 - UML standard compliance
@@ -229,7 +250,7 @@ https://github.com/SergeBouts/HSM.git
 ```
 
 1. Click "Next"
-2. Ensure that the "Rules" field is set to something like this: "Version: Up To Next Minor: 0.11.0"
+2. Ensure that the "Rules" field is set to something like this: "Version: Up To Next Minor: 0.11.1"
 3. Click "Next" to finish
 
 For more info, check out [here](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app).
