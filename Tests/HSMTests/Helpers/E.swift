@@ -2,7 +2,7 @@
 //  E.swift
 //  HSM
 //
-//  Created by Serge Bouts on 3/12/20.
+//  Created by Serhiy Butz on 3/12/20.
 //  Copyright © 2020 iRiZen.com. All rights reserved.
 //
 

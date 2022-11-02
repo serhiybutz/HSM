@@ -2,7 +2,7 @@
 //  TransitionHSM02.swift
 //  HSM
 //
-//  Created by Serge Bouts on 3/26/20.
+//  Created by Serhiy Butz on 3/26/20.
 //  Copyright © 2020 iRiZen.com. All rights reserved.
 //
 

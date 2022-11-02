@@ -6,11 +6,15 @@ __UML statecharts__ (__Hierarchical State Machine__) framework implementation in
     <img src="https://img.shields.io/badge/Swift-5.1-orange" alt="Swift" />
     <img src="https://img.shields.io/badge/platform-macOS%20|%20iOS-orange.svg" alt="Platform" />
     <img src="https://img.shields.io/badge/Swift%20Package%20Manager-compatible-orange" alt="SPM" />
-    <a href="https://github.com/SergeBouts/Mitra/blob/master/LICENSE">
+    <a href="https://github.com/SerhiyButz/HSM/blob/master/LICENSE">
         <img src="https://img.shields.io/badge/licence-MIT-orange" alt="License" />
     </a>
 </p>
 
+TODO: Work through the idea of using the Actor approach like in the ImageDownloader example from [https://developer.apple.com/videos/play/wwdc2021/10133] to address the run to completion problem when state transition in asynchronous/concurrent code.
+ For example, the need for transient states "inProgress"/"is...ing" involves some overhead strategy logic, for example, to discard concurrent controls of flow when they meet the state machine in those states. Another approach whould be to use completion handlers for all calls to the state machine, that are automatically called back when the state is back to normal (non-transient).
+ 
+ TODO: My HSM doesn’t address the problem of state scope (lifetime). When transitioning from a state, its attributes (dependencies) should be destroyed, and on transitioning to a state, its attributes (dependencies) should be created anew.
 
 
 ## Contents
@@ -140,12 +144,12 @@ Each state must bind its sub-states in the `initialize()` method, passing them a
 
 Here are simple demo apps so that you can try and hands-on experiment with the framework yourself.
 
-## [HSM-based running lights demo](https://github.com/SergeBouts/HSMRunningLightsDemo)
+## [HSM-based running lights demo](https://github.com/SerhiyButz/HSMRunningLightsDemo)
 
 Statechart diagram:
 
 
-![](https://github.com/SergeBouts/HSMRunningLightsDemo/blob/master/statechart.svg?raw=true)
+![](https://github.com/SerhiyButz/HSMRunningLightsDemo/blob/master/statechart.svg?raw=true)
 
 Here's the source code of the HSM-based application controller for the above statechart diagram:
 
@@ -258,14 +262,14 @@ class Controller: TopState<Event> {
 
 ```
 
-## [HSM-based calculator demo](https://github.com/SergeBouts/HSMCalculatorDemo)
+## [HSM-based calculator demo](https://github.com/SerhiyButz/HSMCalculatorDemo)
 
 Statechart diagram:
 
 
-![](https://github.com/SergeBouts/HSMCalculatorDemo/blob/master/statechart.svg?raw=true)
+![](https://github.com/SerhiyButz/HSMCalculatorDemo/blob/master/statechart.svg?raw=true)
 
-Examine the source code of the HSM-based application controller for the above statechart diagram [here](https://github.com/SergeBouts/HSMCalculatorDemo/blob/master/HSMCalculator/Controller.swift).
+Examine the source code of the HSM-based application controller for the above statechart diagram [here](https://github.com/SerhiyButz/HSMCalculatorDemo/blob/master/HSMCalculator/Controller.swift).
 
 ## Installation
 
@@ -275,7 +279,7 @@ Examine the source code of the HSM-based application controller for the above st
 2. Paste HSM repository URL into the search field:
 
 ```
-https://github.com/SergeBouts/HSM.git
+https://github.com/SerhiyButz/HSM.git
 ```
 
 1. Click "Next"
